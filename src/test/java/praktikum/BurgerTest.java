@@ -7,12 +7,15 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BurgerTest {
 
     int index;
     int newIndex;
+    private final boolean isDebugging = true;
 
     @Mock
     Bun bun;
@@ -20,15 +23,6 @@ public class BurgerTest {
     List<Ingredient> ingredients;
     @Mock
     Ingredient ingredient;
-    @Mock
-    Burger mBurger;
-
-    @Test
-    public void setBunsTest() {
-        Burger burger = new Burger();
-        burger.setBuns(bun);
-        Mockito.verify(mBurger, Mockito.times(0)).setBuns(bun);
-    }
 
     @Test
     public void addIngredientTest() {
@@ -46,7 +40,7 @@ public class BurgerTest {
 
     @Test
     public void moveIngredientTest() {
-        Burger burger = new Burger(bun,ingredients);
+        Burger burger = new Burger(bun, ingredients);
         burger.moveIngredient(index, newIndex);
         Mockito.verify(ingredients,Mockito.times(1)).add(newIndex, ingredients.remove(index));
     }
@@ -59,7 +53,7 @@ public class BurgerTest {
         Burger burger = new Burger(bun, ingredients);
         Mockito.when(bun.getPrice()).thenReturn(buns.get(0).getPrice());
         assertEquals(1400, burger.getPrice(),0);
-        System.out.println("Стоимость бургера " + burger.getPrice());
+        if (isDebugging) { System.out.println("Стоимость бургера " + burger.getPrice()); };
     }
 
     @Test
@@ -71,7 +65,15 @@ public class BurgerTest {
         Mockito.when(bun.getName()).thenReturn(buns.get(1).getName());
         burger.getReceipt();
         Mockito.verify(bun, Mockito.times(2)).getName();
+        assertThat(burger.getReceipt(), startsWith("(==== white bun ====)"));
+        assertThat(burger.getReceipt(), containsString("= sauce hot sauce ="));
+        assertThat(burger.getReceipt(), containsString("= sauce sour cream ="));
+        assertThat(burger.getReceipt(), containsString("= sauce chili sauce ="));
+        assertThat(burger.getReceipt(), containsString("= filling cutlet ="));
+        assertThat(burger.getReceipt(), containsString("= filling dinosaur ="));
+        assertThat(burger.getReceipt(), containsString("= filling sausage ="));
+        assertThat(burger.getReceipt(), endsWith("Price: 1200,000000\n"));
         assertEquals ("white bun", bun.getName());
-        System.out.println(burger.getReceipt());
+        if (isDebugging) { System.out.println(burger.getReceipt()); };
     }
 }

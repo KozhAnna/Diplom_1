@@ -12,6 +12,7 @@ public class BunTest {
     private final float price;
     private final String textForCheckName;
     private final String textForCheckPrice;
+    private final boolean isDebugging = false;
 
     public BunTest(String name, float price, String textForCheckName, String textForCheckPrice) {
         this.name = name;
@@ -39,7 +40,7 @@ public class BunTest {
         Bun bun = new Bun(name,price);
         String checkedBunName = bun.getName();
         assertEquals(name, checkedBunName);
-        System.out.println("Булочка " + bun.getName()+" - "+textForCheckName);
+        if (isDebugging) { System.out.println("Булочка " + bun.getName()+" - "+textForCheckName); };
     }
 
     @Test
@@ -47,5 +48,5 @@ public class BunTest {
         Bun bun = new Bun(name,price);
         float checkedBunPrice = bun.getPrice();
         assertEquals(price, checkedBunPrice,0);
-        System.out.println("Стоимость " + bun.getPrice() + " - "+ textForCheckPrice);}
+        if (isDebugging) { System.out.println("Стоимость " + bun.getPrice() + " - "+ textForCheckPrice);} };
 }
